@@ -19,39 +19,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>xyz.opcal.demo.cloud</groupId>
         <artifactId>opcal-cloud-alibaba-demo</artifactId>
         <version>3.3.9.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>nacos-demos</artifactId>
+    <artifactId>seata-demos</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>nd-service-api</module>
-        <module>nd-service-a</module>
-        <module>nd-service-b</module>
-        <module>nd-service-c</module>
+        <module>service-api</module>
+        <module>seata-nacos-demos</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-
 
 </project>
