@@ -49,8 +49,8 @@ spring:
       enabled: true
   docker:
     compose:
-      stop:
-        command: down
+#      stop:
+#        command: down
       skip:
         in-tests: false
       file: @basedir@/../integration-compose.yml

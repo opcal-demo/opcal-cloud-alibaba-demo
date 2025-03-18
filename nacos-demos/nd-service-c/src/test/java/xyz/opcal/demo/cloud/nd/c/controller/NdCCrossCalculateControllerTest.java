@@ -39,13 +39,12 @@ class NdCCrossCalculateControllerTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = { "/a/calculate", "/b/calculate", "/dubbo/calculate" })
-	void calculate(String api) throws InterruptedException {
+	void calculate(String api) {
 		var params = new LinkedMultiValueMap<String, Object>();
 		params.add("x", 3D);
 		var responseEntity = restTemplate.postForEntity(api, new HttpEntity<MultiValueMap<String, Object>>(params), Double.class);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		log.info("{} result: {}", api, responseEntity.getBody());
-		Thread.sleep(100000);
 	}
 
 }
