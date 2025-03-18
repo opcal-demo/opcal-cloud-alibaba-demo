@@ -42,11 +42,10 @@ pipeline {
                             '''
                             sh 'start-docker.sh'
                             env.HOST_IP = sh (returnStdout: true, script: "hostname -i");
-                            sh 'docker pull nacos/nacos-server:v2.5.1-slim'
-                            sh 'docker pull ghcr.io/opcal/sentinel-dashboard:latest'
-                            sh 'docker pull ghcr.io/opcal/eclipse-temurin:21-jre'
-                            sh './mvnw -U clean compile'
+                            sh './mvnw -U clean package'
                             sh 'docker image prune -f'
+                            sh 'docker rmi nacos-demos-nd-service-a:latest'
+                            sh 'docker rmi nacos-demos-nd-service-b:latest'
                             sh 'supervisorctl stop all'
                             sh 'tar -C /var/lib/docker/ -czf /var/cache/docker/docker.tar.gz .'
                         }
