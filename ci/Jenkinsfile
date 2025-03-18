@@ -59,12 +59,12 @@ pipeline {
         always {
             cleanWs()
         }
-        failure {
-            emailext(
-                    to: "gissily@outlook.com",
-                    subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${env.currentResult}!",
-                    body: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}. \n\nCheck console output at ${env.BUILD_URL} to view the results."
-            )
-        }
+//        failure {
+//            emailext(
+//                    to: "gissily@outlook.com",
+//                    subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${env.currentResult}!",
+//                    body: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}. \n\nCheck console output at ${env.BUILD_URL} to view the results."
+//            )
+//        }
     }
 }
