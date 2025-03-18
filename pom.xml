@@ -18,9 +18,6 @@
     <name>opcal-cloud-alibaba-demo</name>
     <modules>
         <module>nacos-demos</module>
-        <module>nacos-demos/nd-service-api</module>
-        <module>nacos-demos/nd-service-b</module>
-        <module>nacos-demos/nd-service-c</module>
     </modules>
 
     <properties>

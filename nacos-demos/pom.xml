@@ -28,8 +28,12 @@
 
     <artifactId>nacos-demos</artifactId>
     <packaging>pom</packaging>
+
     <modules>
+        <module>nd-service-api</module>
         <module>nd-service-a</module>
+        <module>nd-service-b</module>
+        <module>nd-service-c</module>
     </modules>
 
     <dependencies>
