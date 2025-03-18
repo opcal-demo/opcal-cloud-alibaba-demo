@@ -42,6 +42,7 @@ pipeline {
                             '''
                             sh 'start-docker.sh'
                             env.HOST_IP = sh (returnStdout: true, script: "hostname -i");
+                            sh 'printenv HOST_IP'
                             sh './mvnw -U clean package'
                             sh 'docker image prune -f'
                             sh 'docker rmi nacos-demos-nd-service-a:latest'
