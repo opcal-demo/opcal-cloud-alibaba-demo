@@ -1,0 +1,10 @@
+[
+  {
+    "resource": "POST:http://nd-service-b/original-api/calculate",
+    "controlBehavior": 0,
+    "count": 50,
+    "grade": 1,
+    "limitApp": "default",
+    "strategy": 0
+  }
+]

@@ -1,0 +1,53 @@
+server:
+  port: 10381
+
+nd:
+  b:
+    calculator:
+      x-factor: 0.987
+      y-factor: 10.314
+      z-factor: 20.159
+
+spring:
+  application:
+    name: nd-service-b
+  main:
+    allow-circular-references: true
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+    nacos:
+      server-addr: "${NACOS_URL:127.0.0.1:8848}"
+      username: "demo"
+      password: "demo"
+      discovery:
+        namespace: opcal-cloud-alibaba-demo
+        group: FEIGN_GROUP
+  docker:
+    compose:
+      stop:
+        command: down
+      skip:
+        in-tests: false
+      file: @basedir@/../docker-compose.yml
+
+feign:
+  sentinel:
+    rules:
+      default:
+        - grade: 2
+          count: 10
+      nd-service-a:
+        - grade: 2
+          count: 5
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+

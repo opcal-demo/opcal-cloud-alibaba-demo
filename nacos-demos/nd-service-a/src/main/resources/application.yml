@@ -1,0 +1,98 @@
+server:
+  port: 10380
+
+nd:
+  a:
+    calculator:
+      x-factor: 0.987
+
+spring:
+  application:
+    name: nd-service-a
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  cloud:
+    openfeign:
+      lazy-attributes-resolution: true
+      circuitbreaker:
+        enabled: true
+    nacos:
+      server-addr: "${NACOS_URL:127.0.0.1:8848}"
+      username: "demo"
+      password: "demo"
+      discovery:
+        namespace: opcal-cloud-alibaba-demo
+        group: FEIGN_GROUP
+    sentinel:
+      eager: true
+      transport:
+        dashboard: "${SENTINEL_URL:127.0.0.1:18080}"
+      datasource:
+        flow:
+          nacos:
+            server-addr: ${spring.cloud.nacos.server-addr}
+            username: ${spring.cloud.nacos.username}
+            password: ${spring.cloud.nacos.password}
+            group-id: SENTINEL_GROUP
+            namespace: opcal-cloud-alibaba-demo
+            data-id: nd-service-a-flow-rule
+            data-type: json
+            rule-type: flow
+        degrade:
+          nacos:
+            server-addr: ${spring.cloud.nacos.server-addr}
+            username: ${spring.cloud.nacos.username}
+            password: ${spring.cloud.nacos.password}
+            group-id: SENTINEL_GROUP
+            namespace: opcal-cloud-alibaba-demo
+            data-id: nd-service-a-degrade-rule
+            data-type: json
+            rule-type: degrade
+  docker:
+    compose:
+      stop:
+        command: down
+      skip:
+        in-tests: false
+      file: @basedir@/../docker-compose.yml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+feign:
+  sentinel:
+    enabled: true
+
+dubbo:
+  application:
+    register-mode: instance
+    service-discovery.migration: FORCE_APPLICATION
+  registry:
+    address: nacos://${spring.cloud.nacos.server-addr}
+    username: ${spring.cloud.nacos.username}
+    password: ${spring.cloud.nacos.password}
+    protocol: dubbo
+    parameters:
+      namespace: opcal-cloud-alibaba-demo
+      group: DUBBO_GROUP
+  metadata-report:
+    address: nacos://${spring.cloud.nacos.server-addr}
+    username: ${spring.cloud.nacos.username}
+    password: ${spring.cloud.nacos.password}
+    protocol: dubbo
+    parameters:
+      namespace: metadata
+      group: DUBBO_GROUP
+  scan:
+    base-packages: xyz.opcal.demo.cloud.nd.a.service
+  protocols:
+    dubbo:
+      port: -1
+      threadpool: virtual

@@ -1,0 +1,19 @@
+[
+
+  {
+    "resource": "POST:http://nd-service-a/original-api/calculate",
+    "controlBehavior": 0,
+    "count": 150,
+    "grade": 1,
+    "limitApp": "default",
+    "strategy": 0
+  },
+  {
+    "resource": "POST:http://nd-service-b/original-api/calculate",
+    "controlBehavior": 0,
+    "count": 250,
+    "grade": 1,
+    "limitApp": "default",
+    "strategy": 0
+  }
+]

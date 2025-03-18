@@ -1,0 +1,10 @@
+[
+  {
+    "resource": "xyz.opcal.demo.cloud.nd.api.service.CalculatorService:calculate(double,double,double)",
+    "count": 25,
+    "grade": 0,
+    "timeWindow": 1,
+    "minRequestAmount": 25,
+    "slowRatioThreshold": 0.6
+  }
+]
