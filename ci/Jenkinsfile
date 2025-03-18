@@ -44,7 +44,7 @@ pipeline {
                             env.HOST_IP = sh (returnStdout: true, script: "hostname -i").trim();
                             sh 'printenv HOST_IP'
                             sh "export HOST_IP=${env.HOST_IP};"
-                            sh "./mvnw -U clean package || sleep 120"
+                            sh "./mvnw -U clean package"
                             sh 'docker image prune -f'
                             sh 'docker rmi nacos-demos-nd-service-a:latest --force'
                             sh 'docker rmi nacos-demos-nd-service-b:latest --force'
@@ -60,12 +60,12 @@ pipeline {
         always {
             cleanWs()
         }
-//        failure {
-//            emailext(
-//                    to: "gissily@outlook.com",
-//                    subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${env.currentResult}!",
-//                    body: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}. \n\nCheck console output at ${env.BUILD_URL} to view the results."
-//            )
-//        }
+        failure {
+            emailext(
+                    to: "gissily@outlook.com",
+                    subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${env.currentResult}!",
+                    body: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${currentBuild.currentResult}. \n\nCheck console output at ${env.BUILD_URL} to view the results."
+            )
+        }
     }
 }

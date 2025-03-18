@@ -25,11 +25,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 public class NdServiceBApplication {
 
 	public static void main(String[] args) {
-		System.out.println("####################");
-		System.out.println("####################");
-		System.out.println(System.getenv("HOST_IP"));
-		System.out.println("####################");
-		System.out.println("####################");
 		SpringApplication.run(NdServiceBApplication.class, args);
 	}
 
