@@ -43,10 +43,11 @@ pipeline {
                             sh 'start-docker.sh'
                             env.HOST_IP = sh (returnStdout: true, script: "hostname -i").trim();
                             sh 'printenv HOST_IP'
-                            sh "export HOST_IP=${env.HOST_IP}; ./mvnw -U clean package || sleep 120"
+                            sh "export HOST_IP=${env.HOST_IP};"
+                            sh "./mvnw -U clean package || sleep 120"
                             sh 'docker image prune -f'
-                            sh 'docker rmi nacos-demos-nd-service-a:latest'
-                            sh 'docker rmi nacos-demos-nd-service-b:latest'
+                            sh 'docker rmi nacos-demos-nd-service-a:latest --force'
+                            sh 'docker rmi nacos-demos-nd-service-b:latest --force'
                             sh 'supervisorctl stop all'
                             sh 'tar -C /var/lib/docker/ -czf /var/cache/docker/docker.tar.gz .'
                         }
