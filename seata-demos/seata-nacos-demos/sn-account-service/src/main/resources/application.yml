@@ -1,0 +1,88 @@
+server:
+  port: 10383
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: account-service
+  main:
+    allow-circular-references: true
+  jpa:
+    show-sql: true
+  cloud:
+    nacos:
+      server-addr: "${NACOS_URL:127.0.0.1:8848}"
+      username: "demo"
+      password: "demo"
+      discovery:
+        namespace: opcal-cloud-alibaba-demo
+        group: FEIGN_GROUP
+  datasource:
+    name: accountDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1:3306}/test?characterEncoding=utf-8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: test
+    password: test
+    druid:
+      max-active: 20
+      min-idle: 2
+      initial-size: 2
+      validation-query: SELECT 1
+  threads:
+    virtual:
+      enabled: true
+  docker:
+    compose:
+      stop:
+        command: down
+      skip:
+        in-tests: false
+      file: @basedir@/../docker-compose.yml
+
+seata:
+  enabled: true
+  service:
+    vgroup-mapping:
+      default_tx_group: default
+    disable-global-transaction: false
+  registry:
+    type: nacos
+    nacos:
+      cluster: default
+      group: SEATA_GROUP
+      application: seata-server
+      server-addr: ${spring.cloud.nacos.server-addr}
+      namespace: opcal-cloud-alibaba-demo
+      username: demo
+      password: demo
+  tx-service-group: default_tx_group
+
+dubbo:
+  application:
+    register-mode: instance
+    service-discovery.migration: FORCE_APPLICATION
+  scan:
+    base-packages: xyz.opcal.demo.cloud.sn.account.service
+  registry:
+    address: nacos://${spring.cloud.nacos.server-addr}
+    username: ${spring.cloud.nacos.username}
+    password: ${spring.cloud.nacos.password}
+    protocol: dubbo
+    parameters:
+      namespace: opcal-cloud-alibaba-demo
+      group: DUBBO_GROUP
+  metadata-report:
+    address: nacos://${spring.cloud.nacos.server-addr}
+    username: ${spring.cloud.nacos.username}
+    password: ${spring.cloud.nacos.password}
+    protocol: dubbo
+    parameters:
+      namespace: metadata
+      group: DUBBO_GROUP
+  protocols:
+    dubbo:
+      threadpool: virtual
+      port: 20880
+

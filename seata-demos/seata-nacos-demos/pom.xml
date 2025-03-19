@@ -30,6 +30,9 @@
 
     <modules>
         <module>sn-account-service</module>
+        <module>sn-storage-service</module>
+        <module>sn-order-service</module>
+        <module>sn-shop-service</module>
     </modules>
 
     <dependencies>
@@ -49,10 +52,6 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.seata</groupId>
-            <artifactId>seata-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
