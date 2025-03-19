@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY ./target/sn-storage-service.jar /app
 
-EXPOSE 10381
+EXPOSE 10384
 
 CMD ["java", "-jar", "/app/sn-storage-service.jar"]
   

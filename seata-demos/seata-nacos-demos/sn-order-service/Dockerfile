@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY ./target/sn-order-service.jar /app
 
-EXPOSE 10381
+EXPOSE 10385
 
 CMD ["java", "-jar", "/app/sn-order-service.jar"]
   
