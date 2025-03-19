@@ -13,7 +13,7 @@ spring:
       circuitbreaker:
         enabled: true
     nacos:
-      server-addr: "127.0.0.1:8848"
+      server-addr: "${NACOS_URL:127.0.0.1:8848}"
       username: "demo"
       password: "demo"
       discovery:
@@ -22,7 +22,7 @@ spring:
     sentinel:
       eager: true
       transport:
-        dashboard: 127.0.0.1:18080
+        dashboard: "${SENTINEL_URL:127.0.0.1:18080}"
       datasource:
         flow:
           nacos:
