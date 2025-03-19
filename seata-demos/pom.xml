@@ -31,6 +31,7 @@
     <modules>
         <module>service-api</module>
         <module>seata-nacos-demos</module>
+        <module>seata-zk-demos</module>
     </modules>
 
 </project>

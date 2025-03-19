@@ -1,0 +1,129 @@
+
+services:
+  zk:
+    pull_policy: always
+    image: zookeeper:3.9.3
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_4LW_COMMANDS_WHITELIST: "srvr, mntr, ruok"
+    healthcheck:
+      test: echo "ruok" | timeout 2 nc -w 2 localhost 2181 | grep imok
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  mysql:
+    pull_policy: always
+    image: mysql:8.0
+    container_name: mysql
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: "mysqladmin ping -u root -p\"$${MYSQL_ROOT_PASSWORD}\""
+      interval: 2s
+      retries: 20
+  seata:
+    pull_policy: always
+    image: apache/seata-server:2.3.0
+    container_name: seata
+    hostname: "${HOST_IP}"
+    depends_on:
+      zk:
+        condition: service_healthy
+        restart: true
+      mysql:
+        condition: service_healthy
+        restart: true
+    ports:
+      - "7091:7091"
+      - "8091:8091"
+    environment:
+      HOST_IP: "${HOST_IP}"
+      SEATA_PORT: 8091
+      SEATA_IP: "${HOST_IP}"
+    volumes:
+      - ./seata/application.yml:/seata-server/resources/application.yml
+    healthcheck:
+      test: curl --fail http://127.0.0.1:7091/ || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  sz-account-service:
+    build: sz-account-service
+    container_name: sn-account-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+        restart: true
+      seata:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 20383:20383
+      - 20880:20880
+    environment:
+      ZK_URL: "zk:2181"
+      MYSQL_HOST: "mysql:3306"
+      HOST_IP: "${HOST_IP}"
+      DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
+    healthcheck:
+      test: curl --fail http://127.0.0.1:20383/actuator/health/ || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  sz-storage-service:
+    build: sz-storage-service
+    container_name: sn-storage-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+        restart: true
+      seata:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 20384:20384
+      - 20881:20881
+    environment:
+      ZK_URL: "zk:2181"
+      MYSQL_HOST: "mysql:3306"
+      HOST_IP: "${HOST_IP}"
+      DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
+    healthcheck:
+      test: curl --fail http://127.0.0.1:20384/actuator/health/ || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  sz-order-service:
+    build: sz-order-service
+    container_name: sn-order-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+        restart: true
+      seata:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 20385:20385
+      - 20882:20882
+    environment:
+      ZK_URL: "zk:2181"
+      MYSQL_HOST: "mysql:3306"
+      HOST_IP: "${HOST_IP}"
+      DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
+    healthcheck:
+      test: curl --fail http://127.0.0.1:20385/actuator/health/ || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 3

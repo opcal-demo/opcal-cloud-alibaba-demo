@@ -51,6 +51,9 @@ pipeline {
                             sh 'docker rmi seata-nacos-demos-sn-order-service:latest --force'
                             sh 'docker rmi seata-nacos-demos-sn-storage-service:latest --force'
                             sh 'docker rmi seata-nacos-demos-sn-account-service:latest --force'
+                            sh 'docker rmi seata-zk-demos-sz-order-service:latest --force'
+                            sh 'docker rmi seata-zk-demos-sz-storage-service:latest --force'
+                            sh 'docker rmi seata-zk-demos-sz-account-service:latest --force'
                             sh 'supervisorctl stop all'
                             sh 'tar -C /var/lib/docker/ -czf /var/cache/docker/docker.tar.gz .'
                         }

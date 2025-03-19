@@ -1,0 +1,74 @@
+server:
+  port: 20384
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: storage-service
+  main:
+    allow-circular-references: true
+  jpa:
+    show-sql: true
+  cloud:
+    zookeeper:
+      connect-string: ${ZK_URL:127.0.0.1:2181}
+      discovery:
+        prefer-ip-address: true
+        instance-ip-address: ${HOST_IP}
+  datasource:
+    name: accountDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://${MYSQL_HOST:127.0.0.1:3306}/test?characterEncoding=utf-8&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true"
+    username: test
+    password: test
+    druid:
+      max-active: 20
+      min-idle: 2
+      initial-size: 2
+      validation-query: SELECT 1
+  threads:
+    virtual:
+      enabled: true
+  docker:
+    compose:
+      stop:
+        command: down
+      skip:
+        in-tests: false
+      file: @basedir@/../docker-compose.yml
+
+
+seata:
+  enabled: true
+  tx-service-group: default_tx_group
+  service:
+    vgroup-mapping:
+      default_tx_group: default
+    disable-global-transaction: false
+  registry:
+    type: zk
+    zk:
+      cluster: default
+      server-addr: ${spring.cloud.zookeeper.connect-string}
+      session-timeout: 6000
+      connect-timeout: 2000
+
+dubbo:
+  application:
+    register-mode: instance
+    service-discovery.migration: FORCE_APPLICATION
+  scan:
+    base-packages: xyz.opcal.demo.cloud.sz.storage.service
+  registry:
+   address: zookeeper://${spring.cloud.zookeeper.connect-string}
+   parameters:
+     rootPath: /dubbo/service
+  metadata-report:
+   address: zookeeper://${spring.cloud.zookeeper.connect-string}
+  protocols:
+    dubbo:
+      threadpool: virtual
+      port: 20881
+
