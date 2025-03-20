@@ -60,7 +60,7 @@ services:
       retries: 3
   sz-account-service:
     build: sz-account-service
-    container_name: sn-account-service
+    container_name: sz-account-service
     depends_on:
       mysql:
         condition: service_healthy
@@ -83,7 +83,7 @@ services:
       retries: 3
   sz-storage-service:
     build: sz-storage-service
-    container_name: sn-storage-service
+    container_name: sz-storage-service
     depends_on:
       mysql:
         condition: service_healthy
@@ -106,7 +106,7 @@ services:
       retries: 3
   sz-order-service:
     build: sz-order-service
-    container_name: sn-order-service
+    container_name: sz-order-service
     depends_on:
       mysql:
         condition: service_healthy
