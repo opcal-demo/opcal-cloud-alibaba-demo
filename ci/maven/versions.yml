@@ -26,4 +26,6 @@ version-registers:
     update-policy: LATEST
   - property-name: druid.version
     update-policy: LATEST
+  - property-name: dubbo-extensions.version
+    update-policy: LATEST
   

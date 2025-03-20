@@ -1,0 +1,134 @@
+
+services:
+  consul:
+    pull_policy: always
+    image: hashicorp/consul:latest
+    container_name: consul
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    ports:
+      - "8500:8500"
+      - "8600:8600"
+      - "8600:8600/udp"
+    healthcheck:
+      test: curl --fail http://127.0.0.1:8500/ || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  mysql:
+    pull_policy: always
+    image: mysql:8.0
+    container_name: mysql
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: "mysqladmin ping -u root -p\"$${MYSQL_ROOT_PASSWORD}\""
+      interval: 2s
+      retries: 20
+  seata:
+    pull_policy: always
+    image: apache/seata-server:2.3.0
+    container_name: seata
+    hostname: "${HOST_IP}"
+    depends_on:
+      consul:
+        condition: service_healthy
+        restart: true
+      mysql:
+        condition: service_healthy
+        restart: true
+    ports:
+      - "7091:7091"
+      - "8091:8091"
+    environment:
+      HOST_IP: "${HOST_IP}"
+      SEATA_PORT: 8091
+      SEATA_IP: "${HOST_IP}"
+    volumes:
+      - ./seata/application.yml:/seata-server/resources/application.yml
+    healthcheck:
+      test: curl --fail http://127.0.0.1:7091/ || exit 1
+      start_period: 20s # wait for service registry
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  sc-account-service:
+    build: sc-account-service
+    container_name: sc-account-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+        restart: true
+      seata:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 30383:30383
+      - 20880:20880
+    environment:
+      CONSUL_HOST: "consul"
+      MYSQL_HOST: "mysql:3306"
+      HOST_IP: "${HOST_IP}"
+      DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
+    healthcheck:
+      test: curl --fail http://127.0.0.1:30383/actuator/health/ || exit 1
+      start_period: 15s # wait for service registry
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  sc-storage-service:
+    build: sc-storage-service
+    container_name: sc-storage-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+        restart: true
+      seata:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 30384:30384
+      - 20881:20881
+    environment:
+      CONSUL_HOST: "consul"
+      MYSQL_HOST: "mysql:3306"
+      HOST_IP: "${HOST_IP}"
+      DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
+    healthcheck:
+      test: curl --fail http://127.0.0.1:30384/actuator/health/ || exit 1
+      start_period: 10s # wait for service registry
+      interval: 5s
+      timeout: 5s
+      retries: 3
+  sc-order-service:
+    build: sc-order-service
+    container_name: sc-order-service
+    depends_on:
+      mysql:
+        condition: service_healthy
+        restart: true
+      seata:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 30385:30385
+      - 20882:20882
+    environment:
+      CONSUL_HOST: "consul"
+      MYSQL_HOST: "mysql:3306"
+      HOST_IP: "${HOST_IP}"
+      DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
+    healthcheck:
+      test: curl --fail http://127.0.0.1:30385/actuator/health/ || exit 1
+      start_period: 10s # wait for service registry
+      interval: 5s
+      timeout: 5s
+      retries: 3
