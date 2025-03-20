@@ -59,7 +59,7 @@ services:
       start_period: 20s # wait for service registry
       interval: 5s
       timeout: 5s
-      retries: 3
+      retries: 5
   sc-account-service:
     build: sc-account-service
     container_name: sc-account-service
@@ -83,7 +83,7 @@ services:
       start_period: 15s # wait for service registry
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 3
   sc-storage-service:
     build: sc-storage-service
     container_name: sc-storage-service
