@@ -20,7 +20,7 @@ if [ -f "${UPDATE_FLAG}" ];then
 
   if [ -f "${PARENT_FLAG}" ];then
     echo "update parent"
-    "${SCRIPT_DIR_PATH}"/opcal-build-version.sh
+    "${SCRIPT_DIR_PATH}"/opcal-cloud-version.sh
   fi
 
   message=$(cat ${UPDATE_FLAG})
