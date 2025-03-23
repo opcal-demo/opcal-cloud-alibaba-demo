@@ -55,6 +55,7 @@ services:
       - ./seata/application.yml:/seata-server/resources/application.yml
     healthcheck:
       test: curl --fail http://127.0.0.1:7091/ || exit 1
+      start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s
       retries: 3
@@ -78,6 +79,7 @@ services:
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
     healthcheck:
       test: curl --fail http://127.0.0.1:20383/actuator/health/ || exit 1
+      start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s
       retries: 3
@@ -101,6 +103,7 @@ services:
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
     healthcheck:
       test: curl --fail http://127.0.0.1:20384/actuator/health/ || exit 1
+      start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s
       retries: 3
@@ -124,6 +127,7 @@ services:
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
     healthcheck:
       test: curl --fail http://127.0.0.1:20385/actuator/health/ || exit 1
+      start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s
       retries: 3

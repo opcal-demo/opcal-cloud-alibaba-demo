@@ -63,6 +63,7 @@ services:
       - ./seata/application.yml:/seata-server/resources/application.yml
     healthcheck:
       test: curl --fail http://127.0.0.1:7091/ || exit 1
+      start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s
       retries: 3
@@ -87,6 +88,7 @@ services:
       "spring.cloud.nacos.discovery.ip": "${HOST_IP}"
     healthcheck:
       test: curl --fail http://127.0.0.1:10383/actuator/health/ || exit 1
+      start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s
       retries: 3
@@ -111,6 +113,7 @@ services:
       "spring.cloud.nacos.discovery.ip": "${HOST_IP}"
     healthcheck:
       test: curl --fail http://127.0.0.1:10384/actuator/health/ || exit 1
+      start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s
       retries: 3
@@ -135,6 +138,7 @@ services:
       "spring.cloud.nacos.discovery.ip": "${HOST_IP}"
     healthcheck:
       test: curl --fail http://127.0.0.1:10385/actuator/health/ || exit 1
+      start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s
       retries: 3
