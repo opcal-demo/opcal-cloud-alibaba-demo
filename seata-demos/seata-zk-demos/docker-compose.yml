@@ -55,6 +55,7 @@ services:
       - ./seata/application.yml:/seata-server/resources/application.yml
     healthcheck:
       test: curl --fail http://127.0.0.1:7091/ || exit 1
+      start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s
       retries: 3
