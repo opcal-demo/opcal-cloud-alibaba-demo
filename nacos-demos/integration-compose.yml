@@ -1,7 +1,7 @@
 
 services:
   nacos:
-    pull_policy: missing
+    pull_policy: weekly
     image: nacos/nacos-server:v2.5.1-slim
     container_name: nacos-standalone
     environment:
@@ -22,7 +22,7 @@ services:
       timeout: 5s
       retries: 3
   sentinel:
-    pull_policy: missing
+    pull_policy: weekly
     image: ghcr.io/opcal/sentinel-dashboard:latest
     container_name: sentinel-dashboard
     ports:

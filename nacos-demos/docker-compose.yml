@@ -1,7 +1,7 @@
 
 services:
   nacos:
-    pull_policy: missing
+    pull_policy: weekly
     image: nacos/nacos-server:v2.5.1-slim
     container_name: nacos-standalone
     environment:
@@ -17,7 +17,7 @@ services:
       - "8848:8848"
       - "9848:9848"
   sentinel:
-    pull_policy: missing
+    pull_policy: weekly
     image: ghcr.io/opcal/sentinel-dashboard:latest
     container_name: sentinel-dashboard
     ports:
