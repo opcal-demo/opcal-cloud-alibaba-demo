@@ -48,6 +48,7 @@ pipeline {
                             env.HOST_IP = sh (returnStdout: true, script: "hostname -i").trim();
                             sh 'printenv HOST_IP'
                             sh "export HOST_IP=${env.HOST_IP};"
+                            sh "export PULL_POLICY=${params.PULL_POLICY};"
                             sh "./mvnw -U clean package"
                             sh 'docker rmi nacos-demos-nd-service-a:latest --force'
                             sh 'docker rmi nacos-demos-nd-service-b:latest --force'
