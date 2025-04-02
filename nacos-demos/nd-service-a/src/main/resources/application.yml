@@ -51,11 +51,15 @@ spring:
             rule-type: degrade
   docker:
     compose:
+      start:
+        arguments:
+          - --pull=${PULL_POLICY:missing}
       stop:
         command: down
       skip:
         in-tests: false
-      file: @basedir@/../docker-compose.yml
+      file:
+        - ../docker-compose.yml
 
 management:
   endpoints:
