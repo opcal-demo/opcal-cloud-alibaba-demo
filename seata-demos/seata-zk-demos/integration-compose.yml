@@ -1,7 +1,6 @@
 
 services:
   zk:
-    pull_policy: $${PULL_POLICY:missing}
     image: zookeeper:3.9.3
     container_name: zookeeper
     ports:
@@ -14,7 +13,6 @@ services:
       timeout: 5s
       retries: 5
   mysql:
-    pull_policy: $${PULL_POLICY:missing}
     image: mysql:8.0
     container_name: mysql
     command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
@@ -33,7 +31,6 @@ services:
       interval: 2s
       retries: 20
   seata:
-    pull_policy: $${PULL_POLICY:missing}
     image: apache/seata-server:2.3.0
     container_name: seata
     hostname: "${HOST_IP}"

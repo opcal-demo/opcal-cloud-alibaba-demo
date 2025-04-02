@@ -33,11 +33,16 @@ spring:
       enabled: true
   docker:
     compose:
+      start:
+        arguments:
+          - --pull=${PULL_POLICY:missing}
+          - --build
       stop:
         command: down
       skip:
         in-tests: false
-      file: @basedir@/../integration-compose.yml
+      file:
+        - ../integration-compose.yml
 
 seata:
   enabled: true
