@@ -6,6 +6,10 @@ pipeline {
         }
     }
 
+    parameters {
+        choice choices: ['missing', 'weekly', 'always'], name: 'PULL_POLICY'
+    }
+
     stages {
         stage('Validation') {
             steps {
