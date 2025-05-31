@@ -16,8 +16,11 @@
 
 package xyz.opcal.demo.cloud.api.exception;
 
+import java.io.Serial;
+
 public class BusinessException extends RuntimeException {
 
+	@Serial
 	private static final long serialVersionUID = 8631811820151262157L;
 
 	public BusinessException(String msg) {
