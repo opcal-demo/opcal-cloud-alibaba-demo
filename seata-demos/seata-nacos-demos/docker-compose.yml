@@ -1,7 +1,7 @@
 
 services:
   nacos:
-    image: nacos/nacos-server:v2.5.1-slim
+    image: nacos/nacos-server:v3.1.0-slim
     container_name: nacos-standalone
     environment:
       - PREFER_HOST_MODE=hostname
@@ -13,10 +13,11 @@ services:
     volumes:
       - ./nacos-data/:/home/nacos/data
     ports:
+      - "8080:8080"
       - "8848:8848"
       - "9848:9848"
     healthcheck:
-      test: curl --fail http://127.0.0.1:8848/nacos/actuator/health || exit 1
+      test: curl http://127.0.0.1:8848/nacos/actuator || exit 1
       interval: 5s
       timeout: 5s
       retries: 3
@@ -39,7 +40,7 @@ services:
       interval: 2s
       retries: 20
   seata:
-    image: apache/seata-server:2.3.0
+    image: apache/seata-server:2.5.0
     container_name: seata
     hostname: "${HOST_IP}"
     depends_on:
@@ -50,7 +51,6 @@ services:
         condition: service_healthy
         restart: true
     ports:
-      - "7091:7091"
       - "8091:8091"
     environment:
       HOST_IP: "${HOST_IP}"
@@ -59,7 +59,7 @@ services:
     volumes:
       - ./seata/application.yml:/seata-server/resources/application.yml
     healthcheck:
-      test: curl --fail http://127.0.0.1:7091/ || exit 1
+      test: curl http://127.0.0.1:8091/ || exit 1
       start_period: 10s # wait for service registry
       interval: 5s
       timeout: 5s

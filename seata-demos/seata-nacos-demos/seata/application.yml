@@ -1,9 +1,11 @@
 server:
-  port: 7091
+  port: 8091
 
 spring:
   application:
     name: seata-server
+  main:
+    web-application-type: none
 
 logging:
   config: classpath:logback-spring.xml

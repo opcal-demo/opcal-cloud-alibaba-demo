@@ -4,7 +4,7 @@
     <parent>
         <groupId>xyz.opcal.cloud</groupId>
         <artifactId>opcal-cloud-starter-parent</artifactId>
-        <version>3.4.10.0</version>
+        <version>3.5.6.0</version>
         <relativePath/>
     </parent>
 
@@ -23,9 +23,9 @@
     <properties>
         <java.version>21</java.version>
 
-        <spring-boot.version>3.4.10</spring-boot.version>
-        <spring-cloud.version>2024.0.2</spring-cloud.version>
-        <spring-cloud-alibaba.version>2023.0.3.4</spring-cloud-alibaba.version>
+        <spring-boot.version>3.5.6</spring-boot.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
+        <spring-cloud-alibaba.version>2025.0.0.0</spring-cloud-alibaba.version>
         <dubbo.version>3.3.5</dubbo.version>
         <dubbo-extensions.version>3.3.1</dubbo-extensions.version>
         <alibaba-sentinel.version>1.8.9-preview</alibaba-sentinel.version>
