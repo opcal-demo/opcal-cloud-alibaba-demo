@@ -10,7 +10,7 @@
 
     <groupId>xyz.opcal.demo.cloud</groupId>
     <artifactId>opcal-cloud-alibaba-demo</artifactId>
-    <version>3.3.15.1-SNAPSHOT</version>
+    <version>3.3.15.2-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
