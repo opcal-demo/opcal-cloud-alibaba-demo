@@ -305,7 +305,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <configuration>
-                    <rulesUri>file://${session.executionRootDirectory}/ci/maven/rules.xml</rulesUri>
+                    <rulesUri>https://raw.githubusercontent.com/opcal-demo/opcal-cloud-alibaba-demo/refs/heads/3.4.x/ci/maven/rules.xml</rulesUri>
                 </configuration>
             </plugin>
         </plugins>
