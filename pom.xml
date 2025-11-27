@@ -26,7 +26,7 @@
         <spring-boot.version>3.4.12</spring-boot.version>
         <spring-cloud.version>2024.0.2</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.3.4</spring-cloud-alibaba.version>
-        <dubbo.version>3.3.5</dubbo.version>
+        <dubbo.version>3.3.6</dubbo.version>
         <dubbo-extensions.version>3.3.1</dubbo-extensions.version>
         <alibaba-sentinel.version>1.8.9</alibaba-sentinel.version>
         <druid.version>1.2.27</druid.version>
