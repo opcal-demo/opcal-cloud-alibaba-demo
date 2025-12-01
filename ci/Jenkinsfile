@@ -61,7 +61,7 @@ pipeline {
                             sh 'printenv HOST_IP'
                             sh "export HOST_IP=${env.HOST_IP};"
                             sh "export PULL_POLICY=${params.PULL_POLICY};"
-                            sh "./mvnw -U clean package"
+                            sh "./mvnw -U clean verify"
                             sh 'docker rmi nacos-demos-nd-service-a:latest --force'
                             sh 'docker rmi nacos-demos-nd-service-b:latest --force'
                             sh 'docker rmi seata-nacos-demos-sn-order-service:latest --force'
