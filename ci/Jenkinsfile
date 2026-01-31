@@ -95,7 +95,7 @@ pipeline {
             script {
                 env.AI_EXPLAIN = explainError(
                     maxLines: 10000,
-                    logPattern: '(?i)(error|failed|exception)'
+                    logPattern: '(?i)(error|failed|exception|timeout)'
                 )
             }
             withCredentials([
