@@ -31,7 +31,7 @@
         <alibaba-sentinel.version>1.8.9</alibaba-sentinel.version>
         <druid.version>1.2.27</druid.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-        <org.mapstruct.version>1.7.0.Beta1</org.mapstruct.version>
+        <org.mapstruct.version>1.6.3</org.mapstruct.version>
         <com.101tec.zkclient.version>0.11</com.101tec.zkclient.version>
     </properties>
 
@@ -147,13 +147,6 @@
         <repository>
             <id>common-sonatype-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>s01-sonatype-snapshots</id>
-            <url>https://s01.oss.sonatype.org/repositories/snapshots/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -305,7 +298,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <configuration>
-                    <rulesUri>https://raw.githubusercontent.com/opcal-demo/opcal-cloud-alibaba-demo/refs/heads/main/ci/maven/rules.xml</rulesUri>
+                    <rulesUri>file://${project.basedir}/ci/maven/rules.xml</rulesUri>
                 </configuration>
             </plugin>
         </plugins>
