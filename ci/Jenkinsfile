@@ -43,7 +43,7 @@ pipeline {
                 cache(caches: [
                         arbitraryFileCache(cacheName: '', cacheValidityDecidingFile: '', compressionMethod: 'TARGZ_BEST_SPEED', excludes: '', includes: '**/*', path: '/var/cache/docker')
                     ],
-                    defaultBranch: 'main',
+                    defaultBranch: '3.5.x',
                     maxCacheSize: 0) {
                     container("dind-jdk-21") {
                         script {
@@ -54,7 +54,7 @@ pipeline {
                                 fi
                             '''
                             sh 'start-docker.sh'
-                            env.HOST_IP = sh (returnStdout: true, script: "hostname -i").trim();
+                            env.HOST_IP = sh (returnStdout: true, script: "hostname -i").trim()
                             if (params.PULL_POLICY == "always") {
                                 sh './ci/script/latest_image.sh'
                             }
