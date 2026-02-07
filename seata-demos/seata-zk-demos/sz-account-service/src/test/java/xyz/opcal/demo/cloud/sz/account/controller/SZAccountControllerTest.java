@@ -16,21 +16,23 @@
 
 package xyz.opcal.demo.cloud.sz.account.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.LinkedMultiValueMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@AutoConfigureTestRestTemplate
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SZAccountControllerTest {
 
@@ -51,7 +53,7 @@ class SZAccountControllerTest {
 		var params = new LinkedMultiValueMap<String, Object>();
 		params.add("userId", "U100001");
 		params.add("money", "9000");
-		var response = restTemplate.postForEntity("/account", new HttpEntity<>(params),String.class);
+		var response = restTemplate.postForEntity("/account", new HttpEntity<>(params), String.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
@@ -70,7 +72,7 @@ class SZAccountControllerTest {
 		params.add("userId", "U100001");
 		params.add("money", "9000");
 		params.add("error", "true");
-		var response = restTemplate.postForEntity("/account", new HttpEntity<>(params),String.class);
+		var response = restTemplate.postForEntity("/account", new HttpEntity<>(params), String.class);
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 	}
 }
