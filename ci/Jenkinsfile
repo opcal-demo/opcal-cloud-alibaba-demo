@@ -51,6 +51,7 @@ pipeline {
                                 if [ -f /var/cache/docker/docker.tar.gz ]; then
                                     ls -la /var/cache/docker/docker.tar.gz
                                     tar -xzf /var/cache/docker/docker.tar.gz -C /var/lib/docker/
+                                    echo "restored docker cache done!"
                                 fi
                             '''
                             sh 'start-docker.sh'
