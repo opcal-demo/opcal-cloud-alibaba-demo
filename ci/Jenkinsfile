@@ -99,19 +99,8 @@ pipeline {
         failure {
             withCredentials([
                 string(credentialsId: 'ALERT_MAIL', variable: 'SEND_TO'),
-                string(credentialsId: 'n8n-pre-load-url', variable: 'N8N_PRE_URL'),
                 string(credentialsId: 'n8n-trigger-url-ai-error', variable: 'N8N_ANA_URL')
             ]) {
-                httpRequest( httpMode: 'POST',
-                    acceptType: 'APPLICATION_JSON',
-                    contentType: 'APPLICATION_JSON',
-                    authentication: 'n8n-trigger-ai-error',
-                    requestBody: """{
-                        "model": "${env.OL_MODEL}"
-                    }""",
-                    url: "${N8N_PRE_URL}",
-                    wrapAsMultipart: false
-                )
                 httpRequest( httpMode: 'POST',
                     acceptType: 'APPLICATION_JSON',
                     contentType: 'APPLICATION_JSON',
