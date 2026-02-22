@@ -1,7 +1,7 @@
 
 services:
   nacos:
-    image: nacos/nacos-server:v3.1.0-slim
+    image: nacos/nacos-server:v3.1.1-slim
     container_name: nacos-standalone
     environment:
       - PREFER_HOST_MODE=hostname
@@ -40,7 +40,7 @@ services:
       interval: 2s
       retries: 20
   seata:
-    image: apache/seata-server:2.5.0
+    image: apache/seata-server:2.6.0
     container_name: seata
     hostname: "${HOST_IP}"
     depends_on:

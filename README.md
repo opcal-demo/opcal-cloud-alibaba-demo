@@ -7,5 +7,5 @@
 export HOST_IP=`host ip`
 
 # test
-./mvnw clean package
+./mvnw clean verify
 ```
