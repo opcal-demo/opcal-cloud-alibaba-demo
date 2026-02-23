@@ -1,8 +1,31 @@
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    command: [ "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci" ]
+    ports:
+      - 3306:3306
+    environment:
+      LANG: C.UTF-8
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: "mysqladmin ping -u root -p\"$${MYSQL_ROOT_PASSWORD}\""
+      interval: 2s
+      retries: 20
   nacos:
     image: nacos/nacos-server:v3.1.1-slim
     container_name: nacos-standalone
+    depends_on:
+      mysql:
+        condition: service_healthy
+        restart: true
     environment:
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
@@ -10,12 +33,21 @@ services:
       - NACOS_AUTH_IDENTITY_KEY=demo
       - NACOS_AUTH_IDENTITY_VALUE=demo
       - NACOS_AUTH_TOKEN=SecretKey012345678901234567890123456789012345678901234567890123456789
-    volumes:
-      - ./nacos-data/:/home/nacos/data
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_DB_NAME=test
+      - MYSQL_SERVICE_USER=test
+      - MYSQL_SERVICE_PASSWORD=test
+      - MYSQL_SERVICE_DB_PARAM=allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=true
     ports:
       - "8080:8080"
       - "8848:8848"
       - "9848:9848"
+    healthcheck:
+      test: curl --fail http://127.0.0.1:8848/nacos/actuator || exit 1
+      interval: 5s
+      retries: 20
   sentinel:
     image: ghcr.io/opcal/sentinel-dashboard:latest
     container_name: sentinel-dashboard

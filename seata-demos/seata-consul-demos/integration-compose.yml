@@ -9,9 +9,8 @@ services:
       - "8600:8600"
       - "8600:8600/udp"
     healthcheck:
-      test: curl --fail http://127.0.0.1:8500/ || exit 1
+      test: sleep 3; curl --fail http://127.0.0.1:8500/ || exit 1
       interval: 5s
-      timeout: 5s
       retries: 5
   mysql:
     image: mysql:8.0
@@ -51,10 +50,8 @@ services:
     volumes:
       - ./seata/application.yml:/seata-server/resources/application.yml
     healthcheck:
-      test: curl --fail http://consul:8500/v1/agent/health/service/name/default || exit 1
-      start_period: 20s # wait for service registry
+      test: sleep 3; curl --fail http://consul:8500/v1/agent/health/service/name/default || exit 1
       interval: 5s
-      timeout: 5s
       retries: 5
   sc-account-service:
     build: sc-account-service
@@ -75,8 +72,7 @@ services:
       HOST_IP: "${HOST_IP}"
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
     healthcheck:
-      test: curl --fail http://consul:8500/v1/agent/health/service/name/account-service || exit 1
-      start_period: 15s # wait for service registry
+      test: sleep 3; curl --fail http://consul:8500/v1/agent/health/service/name/account-service || exit 1
       interval: 5s
       timeout: 5s
       retries: 3
@@ -99,10 +95,8 @@ services:
       HOST_IP: "${HOST_IP}"
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
     healthcheck:
-      test: curl --fail http://consul:8500/v1/agent/health/service/name/storage-service || exit 1
-      start_period: 10s # wait for service registry
+      test: sleep 3; curl --fail http://consul:8500/v1/agent/health/service/name/storage-service || exit 1
       interval: 5s
-      timeout: 5s
       retries: 3
   sc-order-service:
     build: sc-order-service
@@ -123,8 +117,6 @@ services:
       HOST_IP: "${HOST_IP}"
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
     healthcheck:
-      test: curl --fail http://consul:8500/v1/agent/health/service/name/order-service || exit 1
-      start_period: 10s # wait for service registry
+      test: sleep 3; curl --fail http://consul:8500/v1/agent/health/service/name/order-service || exit 1
       interval: 5s
-      timeout: 5s
       retries: 3

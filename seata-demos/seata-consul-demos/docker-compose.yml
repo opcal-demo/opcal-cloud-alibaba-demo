@@ -9,7 +9,7 @@ services:
       - "8600:8600"
       - "8600:8600/udp"
     healthcheck:
-      test: curl --fail http://127.0.0.1:8500/ || exit 1
+      test: sleep 3; curl --fail http://127.0.0.1:8500/ || exit 1
       interval: 5s
       timeout: 5s
       retries: 5
@@ -51,8 +51,6 @@ services:
     volumes:
       - ./seata/application.yml:/seata-server/resources/application.yml
     healthcheck:
-      test: curl --fail http://consul:8500/v1/agent/health/service/name/default || exit 1
-      start_period: 20s # wait for service registry
+      test: sleep 3; curl --fail http://consul:8500/v1/agent/health/service/name/default || exit 1
       interval: 5s
-      timeout: 5s
       retries: 5

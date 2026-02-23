@@ -8,9 +8,8 @@ services:
     environment:
       ZOO_4LW_COMMANDS_WHITELIST: "srvr, mntr, ruok"
     healthcheck:
-      test: echo "ruok" | timeout 2 nc -w 2 localhost 2181 | grep imok
+      test: sleep 3; echo "ruok" | timeout 2 nc -w 2 localhost 2181 | grep imok
       interval: 5s
-      timeout: 5s
       retries: 5
   mysql:
     image: mysql:8.0
@@ -50,10 +49,8 @@ services:
     volumes:
       - ./seata/application.yml:/seata-server/resources/application.yml
     healthcheck:
-      test: curl http://127.0.0.1:8091/ || exit 1
-      start_period: 10s # wait for service registry
+      test: sleep 3; curl --fail http://127.0.0.1:8091/health || exit 1
       interval: 5s
-      timeout: 5s
       retries: 3
   sz-account-service:
     build: sz-account-service
@@ -74,10 +71,8 @@ services:
       HOST_IP: "${HOST_IP}"
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
     healthcheck:
-      test: curl --fail http://127.0.0.1:20383/actuator/health/ || exit 1
-      start_period: 10s # wait for service registry
+      test: sleep 3; curl --fail http://127.0.0.1:20383/actuator/health/ || exit 1
       interval: 5s
-      timeout: 5s
       retries: 3
   sz-storage-service:
     build: sz-storage-service
@@ -98,10 +93,8 @@ services:
       HOST_IP: "${HOST_IP}"
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
     healthcheck:
-      test: curl --fail http://127.0.0.1:20384/actuator/health/ || exit 1
-      start_period: 10s # wait for service registry
+      test: sleep 3; curl --fail http://127.0.0.1:20384/actuator/health/ || exit 1
       interval: 5s
-      timeout: 5s
       retries: 3
   sz-order-service:
     build: sz-order-service
@@ -122,8 +115,6 @@ services:
       HOST_IP: "${HOST_IP}"
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
     healthcheck:
-      test: curl --fail http://127.0.0.1:20385/actuator/health/ || exit 1
-      start_period: 10s # wait for service registry
+      test: sleep 3; curl --fail http://127.0.0.1:20385/actuator/health/ || exit 1
       interval: 5s
-      timeout: 5s
       retries: 3
