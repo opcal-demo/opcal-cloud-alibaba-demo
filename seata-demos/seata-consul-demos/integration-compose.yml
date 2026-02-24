@@ -1,21 +1,9 @@
 
 services:
-  consul:
-    image: hashicorp/consul:latest
-    container_name: consul
-    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
-    ports:
-      - "8500:8500"
-      - "8600:8600"
-      - "8600:8600/udp"
-    healthcheck:
-      test: sleep 2; curl --fail http://127.0.0.1:8500/ || exit 1
-      interval: 5s
-      retries: 5
   mysql:
     image: mysql:8.0
     container_name: mysql
-    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    command: [ "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci" ]
     ports:
       - 3306:3306
     environment:
@@ -29,6 +17,18 @@ services:
     healthcheck:
       test: "mysqladmin ping -u root -p\"$${MYSQL_ROOT_PASSWORD}\""
       interval: 2s
+      retries: 20
+  consul:
+    image: hashicorp/consul:latest
+    container_name: consul
+    command: agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+    ports:
+      - "8500:8500"
+      - "8600:8600"
+      - "8600:8600/udp"
+    healthcheck:
+      test: sleep 2; curl --fail http://127.0.0.1:8500/ || exit 1
+      interval: 5s
       retries: 20
   seata:
     image: apache/seata-server:2.6.0
@@ -52,7 +52,7 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://consul:8500/v1/agent/health/service/name/default || exit 1
       interval: 5s
-      retries: 5
+      retries: 20
   sc-account-service:
     build: sc-account-service
     container_name: sc-account-service
@@ -74,8 +74,7 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://consul:8500/v1/agent/health/service/name/account-service || exit 1
       interval: 5s
-      timeout: 5s
-      retries: 3
+      retries: 20
   sc-storage-service:
     build: sc-storage-service
     container_name: sc-storage-service
@@ -97,7 +96,7 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://consul:8500/v1/agent/health/service/name/storage-service || exit 1
       interval: 5s
-      retries: 3
+      retries: 20
   sc-order-service:
     build: sc-order-service
     container_name: sc-order-service
@@ -119,4 +118,4 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://consul:8500/v1/agent/health/service/name/order-service || exit 1
       interval: 5s
-      retries: 3
+      retries: 20

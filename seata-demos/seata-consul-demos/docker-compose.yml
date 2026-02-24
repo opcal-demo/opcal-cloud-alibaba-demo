@@ -1,5 +1,24 @@
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    command: [ "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci" ]
+    ports:
+      - 3306:3306
+    environment:
+      LANG: C.UTF-8
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: "mysqladmin ping -u root -p\"$${MYSQL_ROOT_PASSWORD}\""
+      interval: 2s
+      retries: 20
   consul:
     image: hashicorp/consul:latest
     container_name: consul
@@ -11,25 +30,6 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://127.0.0.1:8500/ || exit 1
       interval: 5s
-      timeout: 5s
-      retries: 5
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
-    ports:
-      - 3306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: test
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_DATABASE: test
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
-    volumes:
-      - ./sql:/docker-entrypoint-initdb.d/
-    healthcheck:
-      test: "mysqladmin ping -u root -p\"$${MYSQL_ROOT_PASSWORD}\""
-      interval: 2s
       retries: 20
   seata:
     image: apache/seata-server:2.6.0
@@ -53,4 +53,4 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://consul:8500/v1/agent/health/service/name/default || exit 1
       interval: 5s
-      retries: 5
+      retries: 20

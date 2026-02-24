@@ -1,23 +1,13 @@
 
 services:
-  zk:
-    image: zookeeper:3.9.4
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    environment:
-      ZOO_4LW_COMMANDS_WHITELIST: "srvr, mntr, ruok"
-    healthcheck:
-      test: sleep 2; echo "ruok" | timeout 2 nc -w 2 localhost 2181 | grep imok
-      interval: 5s
-      retries: 5
   mysql:
     image: mysql:8.0
     container_name: mysql
-    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    command: [ "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci" ]
     ports:
       - 3306:3306
     environment:
+      LANG: C.UTF-8
       MYSQL_ROOT_PASSWORD: test
       MYSQL_ROOT_HOST: '%'
       MYSQL_DATABASE: test
@@ -28,6 +18,17 @@ services:
     healthcheck:
       test: "mysqladmin ping -u root -p\"$${MYSQL_ROOT_PASSWORD}\""
       interval: 2s
+      retries: 20
+  zk:
+    image: zookeeper:3.9.4
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_4LW_COMMANDS_WHITELIST: "srvr, mntr, ruok"
+    healthcheck:
+      test: sleep 2; echo "ruok" | timeout 2 nc -w 2 localhost 2181 | grep imok
+      interval: 5s
       retries: 20
   seata:
     image: apache/seata-server:2.6.0
@@ -51,7 +52,7 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://127.0.0.1:8091/health || exit 1
       interval: 5s
-      retries: 3
+      retries: 20
   sz-account-service:
     build: sz-account-service
     container_name: sz-account-service
@@ -73,7 +74,7 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://127.0.0.1:20383/actuator/health/ || exit 1
       interval: 5s
-      retries: 3
+      retries: 20
   sz-storage-service:
     build: sz-storage-service
     container_name: sz-storage-service
@@ -95,7 +96,7 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://127.0.0.1:20384/actuator/health/ || exit 1
       interval: 5s
-      retries: 3
+      retries: 20
   sz-order-service:
     build: sz-order-service
     container_name: sz-order-service
@@ -117,4 +118,4 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://127.0.0.1:20385/actuator/health/ || exit 1
       interval: 5s
-      retries: 3
+      retries: 20

@@ -45,7 +45,7 @@ services:
       - "8848:8848"
       - "9848:9848"
     healthcheck:
-      test: sleep 2; curl --fail http://127.0.0.1:8848/nacos/actuator || exit 1
+      test: sleep 5; curl --fail http://127.0.0.1:8848/nacos/actuator || exit 1
       interval: 5s
       retries: 20
   seata:
@@ -93,7 +93,7 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://127.0.0.1:10383/actuator/health/ || exit 1
       interval: 5s
-      retries: 3
+      retries: 20
   sn-storage-service:
     build: ./sn-storage-service
     container_name: sn-storage-service
@@ -116,7 +116,7 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://127.0.0.1:10384/actuator/health/ || exit 1
       interval: 5s
-      retries: 3
+      retries: 20
   sn-order-service:
     build: ./sn-order-service
     container_name: sn-order-service
@@ -139,4 +139,4 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://127.0.0.1:10385/actuator/health/ || exit 1
       interval: 5s
-      retries: 3
+      retries: 20
