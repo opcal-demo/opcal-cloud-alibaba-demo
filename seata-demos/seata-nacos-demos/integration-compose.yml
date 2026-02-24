@@ -45,7 +45,7 @@ services:
       - "8848:8848"
       - "9848:9848"
     healthcheck:
-      test: sleep 3; curl --fail http://127.0.0.1:8848/nacos/actuator || exit 1
+      test: sleep 2; curl --fail http://127.0.0.1:8848/nacos/actuator || exit 1
       interval: 5s
       retries: 20
   seata:
@@ -68,7 +68,7 @@ services:
     volumes:
       - ./seata/application.yml:/seata-server/resources/application.yml
     healthcheck:
-      test: sleep 3; curl --fail http://127.0.0.1:8091/health || exit 1
+      test: sleep 2; curl --fail http://127.0.0.1:8091/health || exit 1
       timeout: 5s
       retries: 20
   sn-account-service:
@@ -91,7 +91,7 @@ services:
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
       "spring.cloud.nacos.discovery.ip": "${HOST_IP}"
     healthcheck:
-      test: sleep 3; curl --fail http://127.0.0.1:10383/actuator/health/ || exit 1
+      test: sleep 2; curl --fail http://127.0.0.1:10383/actuator/health/ || exit 1
       interval: 5s
       retries: 3
   sn-storage-service:
@@ -114,7 +114,7 @@ services:
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
       "spring.cloud.nacos.discovery.ip": "${HOST_IP}"
     healthcheck:
-      test: sleep 3; curl --fail http://127.0.0.1:10384/actuator/health/ || exit 1
+      test: sleep 2; curl --fail http://127.0.0.1:10384/actuator/health/ || exit 1
       interval: 5s
       retries: 3
   sn-order-service:
@@ -137,6 +137,6 @@ services:
       DUBBO_IP_TO_REGISTRY: "${HOST_IP}"
       "spring.cloud.nacos.discovery.ip": "${HOST_IP}"
     healthcheck:
-      test: sleep 3; curl --fail http://127.0.0.1:10385/actuator/health/ || exit 1
+      test: sleep 2; curl --fail http://127.0.0.1:10385/actuator/health/ || exit 1
       interval: 5s
       retries: 3
