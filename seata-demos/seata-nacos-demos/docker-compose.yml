@@ -18,7 +18,7 @@ services:
     healthcheck:
       test: "mysqladmin ping -u root -p\"$${MYSQL_ROOT_PASSWORD}\""
       interval: 2s
-      retries: 20
+      retries: 30
   nacos:
     image: nacos/nacos-server:v3.1.1-slim
     container_name: nacos-standalone
@@ -47,7 +47,7 @@ services:
     healthcheck:
       test: curl --fail http://127.0.0.1:8848/nacos/actuator || exit 1
       interval: 5s
-      retries: 20
+      retries: 30
   seata:
     image: apache/seata-server:2.6.0
     container_name: seata
@@ -70,4 +70,4 @@ services:
     healthcheck:
       test: sleep 2; curl --fail http://127.0.0.1:8091/health || exit 1
       interval: 5s
-      retries: 20
+      retries: 30

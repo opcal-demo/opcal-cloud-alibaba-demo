@@ -47,7 +47,7 @@ services:
     healthcheck:
       test: sleep 5; curl --fail http://127.0.0.1:8848/nacos/actuator || exit 1
       interval: 5s
-      retries: 20
+      retries: 30
   sentinel:
     image: ghcr.io/opcal/sentinel-dashboard:latest
     container_name: sentinel-dashboard
