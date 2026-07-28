@@ -1,7 +1,7 @@
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:8.4
     container_name: mysql
     command: [ "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci" ]
     ports:
@@ -20,7 +20,7 @@ services:
       interval: 2s
       retries: 20
   nacos:
-    image: nacos/nacos-server:v3.1.1-slim
+    image: nacos/nacos-server:v3.2.3-slim
     container_name: nacos-standalone
     depends_on:
       mysql:
@@ -49,7 +49,7 @@ services:
       interval: 5s
       retries: 30
   seata:
-    image: apache/seata-server:2.6.0
+    image: apache/seata-server:2.7.0
     container_name: seata
     hostname: "${HOST_IP}"
     depends_on:

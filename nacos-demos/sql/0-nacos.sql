@@ -1,3 +1,8 @@
+-- MySQL dump 10.13  Distrib 8.0.46, for macos26.4 (arm64)
+--
+-- Host: localhost    Database: test
+-- ------------------------------------------------------
+-- Server version	8.0.43
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -11,6 +16,85 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `ai_resource`
+--
+
+DROP TABLE IF EXISTS `ai_resource`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ai_resource` (
+                               `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                               `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                               `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+                               `name` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '资源名称',
+                               `type` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '资源类型',
+                               `c_desc` varchar(2048) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '资源描述',
+                               `status` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '资源状态',
+                               `namespace_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '命名空间ID',
+                               `biz_tags` varchar(1024) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '业务标签',
+                               `ext` longtext COLLATE utf8mb4_unicode_ci COMMENT '扩展信息(JSON)',
+                               `c_from` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'local' COMMENT '来源标识(导入/同步来源)',
+                               `version_info` longtext COLLATE utf8mb4_unicode_ci COMMENT '版本信息(JSON)',
+                               `meta_version` bigint NOT NULL DEFAULT '1' COMMENT '元数据版本(乐观锁)',
+                               `scope` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PRIVATE' COMMENT '可见性: PUBLIC/PRIVATE',
+                               `owner` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '创建者用户名',
+                               `download_count` bigint NOT NULL DEFAULT '0' COMMENT '下载次数',
+                               PRIMARY KEY (`id`),
+                               UNIQUE KEY `uk_ai_resource_ns_name_type` (`namespace_id`,`name`,`type`,`c_from`),
+                               KEY `idx_ai_resource_name` (`name`),
+                               KEY `idx_ai_resource_type` (`type`),
+                               KEY `idx_ai_resource_gmt_modified` (`gmt_modified`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='AI资源元数据表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ai_resource`
+--
+
+LOCK TABLES `ai_resource` WRITE;
+/*!40000 ALTER TABLE `ai_resource` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ai_resource` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ai_resource_version`
+--
+
+DROP TABLE IF EXISTS `ai_resource_version`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ai_resource_version` (
+                                       `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+                                       `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                       `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+                                       `type` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '资源类型',
+                                       `author` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '作者',
+                                       `name` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '资源名称',
+                                       `c_desc` varchar(2048) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '版本描述',
+                                       `status` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '版本状态',
+                                       `version` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '版本号',
+                                       `namespace_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '命名空间ID',
+                                       `storage` longtext COLLATE utf8mb4_unicode_ci COMMENT '存储信息(JSON)',
+                                       `publish_pipeline_info` longtext COLLATE utf8mb4_unicode_ci COMMENT '发布流水线信息(JSON)',
+                                       `download_count` bigint NOT NULL DEFAULT '0' COMMENT '下载次数',
+                                       PRIMARY KEY (`id`),
+                                       UNIQUE KEY `uk_ai_resource_ver_ns_name_type_ver` (`namespace_id`,`name`,`type`,`version`),
+                                       KEY `idx_ai_resource_ver_name` (`name`),
+                                       KEY `idx_ai_resource_ver_status` (`status`),
+                                       KEY `idx_ai_resource_ver_gmt_modified` (`gmt_modified`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='AI资源版本表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ai_resource_version`
+--
+
+LOCK TABLES `ai_resource_version` WRITE;
+/*!40000 ALTER TABLE `ai_resource_version` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ai_resource_version` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `config_info`
 --
 
@@ -19,25 +103,25 @@ DROP TABLE IF EXISTS `config_info`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `config_info` (
                                `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-                               `data_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'data_id',
-                               `group_id` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'group_id',
-                               `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'content',
-                               `md5` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'md5',
+                               `data_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'data_id',
+                               `group_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'group_id',
+                               `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'content',
+                               `md5` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'md5',
                                `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-                               `src_user` text COLLATE utf8mb4_unicode_ci COMMENT 'source user',
-                               `src_ip` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'source ip',
-                               `app_name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'app_name',
-                               `tenant_id` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '租户字段',
-                               `c_desc` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'configuration description',
-                               `c_use` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'configuration usage',
-                               `effect` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '配置生效的描述',
-                               `type` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '配置的类型',
-                               `c_schema` text COLLATE utf8mb4_unicode_ci COMMENT '配置的模式',
-                               `encrypted_data_key` varchar(1024) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '密钥',
+                               `src_user` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'source user',
+                               `src_ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'source ip',
+                               `app_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'app_name',
+                               `tenant_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '租户字段',
+                               `c_desc` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'configuration description',
+                               `c_use` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'configuration usage',
+                               `effect` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '配置生效的描述',
+                               `type` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '配置的类型',
+                               `c_schema` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '配置的模式',
+                               `encrypted_data_key` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '密钥',
                                PRIMARY KEY (`id`),
                                UNIQUE KEY `uk_configinfo_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='config_info';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='config_info';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +130,7 @@ CREATE TABLE `config_info` (
 
 LOCK TABLES `config_info` WRITE;
 /*!40000 ALTER TABLE `config_info` DISABLE KEYS */;
-INSERT INTO `config_info` VALUES (1,'nd-service-a','DEFAULT_GROUP','nd:\n  a:\n    calculator:\n      x-factor: 0.987','809562b3ba6e82410358b9d7f403be26','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo',NULL,NULL,NULL,'yaml',NULL,''),(2,'nd-service-a-flow-rule','SENTINEL_GROUP','[\n  {\n    \"resource\": \"POST:http://nd-service-b/original-api/calculate\",\n    \"controlBehavior\": 0,\n    \"count\": 50,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0\n  }\n]','80c5a1463f280519a2a3a9102e3afeb3','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo',NULL,NULL,NULL,'json',NULL,''),(3,'nd-service-a-degrade-rule','SENTINEL_GROUP','[\n    {\n        \"resource\": \"xyz.opcal.demo.cloud.nd.api.service.CalculatorService:calculate(double,double,double)\",\n        \"count\": 2.5,\n        \"grade\": 0,\n        \"timeWindow\": 2\n    }\n]','d0edbf44fc5fc3d5ffaa20e6c9bf7905','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo',NULL,NULL,NULL,'json',NULL,''),(4,'nd-service-b','DEFAULT_GROUP','nd:\n  b:\n    calculator:\n      x-factor: 0.987\n      y-factor: 10.314\n      z-factor: 20.159\n','d174a7a96cd5be6d3950ab485ae3ae28','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo',NULL,NULL,NULL,'yaml',NULL,''),(5,'nd-service-c-flow-rule','SENTINEL_GROUP','[\n\n  {\n    \"resource\": \"POST:http://nd-service-a/original-api/calculate\",\n    \"controlBehavior\": 0,\n    \"count\": 150,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0\n  },\n  {\n    \"resource\": \"POST:http://nd-service-b/original-api/calculate\",\n    \"controlBehavior\": 0,\n    \"count\": 250,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0\n  }\n]','94bbb08c493ef35179809b58d68415f7','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo','',NULL,NULL,'json',NULL,''),(6,'nd-service-c-degrade-rule','SENTINEL_GROUP','[\n  {\n    \"resource\": \"xyz.opcal.demo.cloud.nd.api.service.CalculatorService:calculate(double,double,double)\",\n    \"count\": 25,\n    \"grade\": 0,\n    \"timeWindow\": 1,\n    \"minRequestAmount\": 25,\n    \"slowRatioThreshold\": 0.6\n  }\n]','bb7496167a4ac3597e4566c208dfe77b','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo','',NULL,NULL,'json',NULL,'');
+INSERT INTO `config_info` VALUES (1,'nd-service-a','DEFAULT_GROUP','nd:\n  a:\n    calculator:\n      x-factor: 0.987','809562b3ba6e82410358b9d7f403be26','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo',NULL,NULL,NULL,'yaml',NULL,''),(2,'nd-service-a-flow-rule','SENTINEL_GROUP','[\n  {\n    \"resource\": \"POST:http://nd-service-b/original-api/calculate\",\n    \"controlBehavior\": 0,\n    \"count\": 50,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0\n  }\n]','80c5a1463f280519a2a3a9102e3afeb3','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo',NULL,NULL,NULL,'json',NULL,''),(3,'nd-service-a-degrade-rule','SENTINEL_GROUP','[\n    {\n        \"resource\": \"xyz.opcal.demo.cloud.nd.api.service.CalculatorService:calculate(double,double,double)\",\n        \"count\": 2.5,\n        \"grade\": 0,\n        \"timeWindow\": 2\n    }\n]','d0edbf44fc5fc3d5ffaa20e6c9bf7905','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo',NULL,NULL,NULL,'json',NULL,''),(4,'nd-service-b','DEFAULT_GROUP','nd:\n  b:\n    calculator:\n      x-factor: 0.987\n      y-factor: 10.314\n      z-factor: 20.159\n','d174a7a96cd5be6d3950ab485ae3ae28','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo',NULL,NULL,NULL,'yaml',NULL,''),(5,'nd-service-c-flow-rule','SENTINEL_GROUP','[\n\n  {\n    \"resource\": \"POST:http://nd-service-a/original-api/calculate\",\n    \"controlBehavior\": 0,\n    \"count\": 150,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0\n  },\n  {\n    \"resource\": \"POST:http://nd-service-b/original-api/calculate\",\n    \"controlBehavior\": 0,\n    \"count\": 250,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0\n  }\n]','94bbb08c493ef35179809b58d68415f7','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo','',NULL,NULL,'json',NULL,''),(6,'nd-service-c-degrade-rule','SENTINEL_GROUP','[\n  {\n    \"resource\": \"xyz.opcal.demo.cloud.nd.api.service.CalculatorService:calculate(double,double,double)\",\n    \"count\": 25,\n    \"grade\": 0,\n    \"timeWindow\": 1,\n    \"minRequestAmount\": 25,\n    \"slowRatioThreshold\": 0.6\n  }\n]','bb7496167a4ac3597e4566c208dfe77b','2026-02-23 10:19:53','2026-02-23 10:19:53','nacos','192.168.65.1','','opcal-cloud-alibaba-demo','',NULL,NULL,'json',NULL,''),(7,'xyz.opcal.demo.cloud.nd.api.service.CalculatorService','mapping','nd-service-a','5885311054d71d727da6e003a6da1275','2026-07-28 14:19:40','2026-07-28 14:19:40',NULL,'192.168.2.11','','metadata',NULL,NULL,NULL,'text',NULL,''),(8,'xyz.opcal.demo.cloud.nd.api.service.CalculatorService:::provider:nd-service-a','DUBBO_GROUP','{\"annotations\":[],\"canonicalName\":\"xyz.opcal.demo.cloud.nd.api.service.CalculatorService\",\"codeSource\":\"file:/Users/sing/development/workspace/opcal.demo/opcal-demo/opcal-cloud-alibaba-demo/nacos-demos/nd-service-api/target/classes/\",\"methods\":[{\"annotations\":[],\"name\":\"calculate\",\"parameterTypes\":[\"double\",\"double\",\"double\"],\"parameters\":[],\"returnType\":\"double\"}],\"parameters\":{\"interface\":\"xyz.opcal.demo.cloud.nd.api.service.CalculatorService\",\"release\":\"3.3.6\",\"side\":\"provider\",\"anyhost\":\"true\",\"dubbo\":\"2.0.2\",\"threadpool\":\"virtual\",\"pid\":\"18196\",\"application\":\"nd-service-a\",\"executor-management-mode\":\"isolation\",\"file-cache\":\"true\",\"methods\":\"calculate\",\"deprecated\":\"false\",\"service-name-mapping\":\"true\",\"register-mode\":\"instance\",\"generic\":\"false\",\"bind.port\":\"20880\",\"bind.ip\":\"10.37.129.2\",\"prefer.serialization\":\"hessian2,fastjson2\",\"background\":\"false\",\"dynamic\":\"true\",\"timestamp\":\"1785248379619\"},\"types\":[{\"enums\":[],\"items\":[],\"properties\":{},\"type\":\"double\"}],\"uniqueId\":\"xyz.opcal.demo.cloud.nd.api.service.CalculatorService@file:/Users/sing/development/workspace/opcal.demo/opcal-demo/opcal-cloud-alibaba-demo/nacos-demos/nd-service-api/target/classes/\"}','f20c56cc597788512e2741e16725b6d1','2026-07-28 14:19:40','2026-07-28 14:19:40',NULL,'192.168.2.11','','metadata',NULL,NULL,NULL,'text',NULL,'');
 /*!40000 ALTER TABLE `config_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,11 +181,11 @@ DROP TABLE IF EXISTS `config_tags_relation`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `config_tags_relation` (
                                         `id` bigint NOT NULL COMMENT 'id',
-                                        `tag_name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'tag_name',
-                                        `tag_type` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'tag_type',
-                                        `data_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'data_id',
-                                        `group_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'group_id',
-                                        `tenant_id` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'tenant_id',
+                                        `tag_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'tag_name',
+                                        `tag_type` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'tag_type',
+                                        `data_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'data_id',
+                                        `group_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'group_id',
+                                        `tenant_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'tenant_id',
                                         `nid` bigint NOT NULL AUTO_INCREMENT COMMENT 'nid, 自增长标识',
                                         PRIMARY KEY (`nid`),
                                         UNIQUE KEY `uk_configtagrelation_configidtag` (`id`,`tag_name`,`tag_type`),
@@ -127,7 +211,7 @@ DROP TABLE IF EXISTS `group_capacity`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `group_capacity` (
                                   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-                                  `group_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'Group ID，空字符表示整个集群',
+                                  `group_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'Group ID，空字符表示整个集群',
                                   `quota` int unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
                                   `usage` int unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
                                   `max_size` int unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
@@ -138,7 +222,7 @@ CREATE TABLE `group_capacity` (
                                   `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
                                   PRIMARY KEY (`id`),
                                   UNIQUE KEY `uk_group_id` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='集群、各Group容量信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='集群、各Group容量信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,6 +231,7 @@ CREATE TABLE `group_capacity` (
 
 LOCK TABLES `group_capacity` WRITE;
 /*!40000 ALTER TABLE `group_capacity` DISABLE KEYS */;
+INSERT INTO `group_capacity` VALUES (1,'',0,8,0,0,0,0,'2026-07-28 22:19:40','2026-07-28 22:29:27');
 /*!40000 ALTER TABLE `group_capacity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,26 +245,26 @@ DROP TABLE IF EXISTS `his_config_info`;
 CREATE TABLE `his_config_info` (
                                    `id` bigint unsigned NOT NULL COMMENT 'id',
                                    `nid` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'nid, 自增标识',
-                                   `data_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'data_id',
-                                   `group_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'group_id',
-                                   `app_name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'app_name',
-                                   `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'content',
-                                   `md5` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'md5',
+                                   `data_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'data_id',
+                                   `group_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'group_id',
+                                   `app_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'app_name',
+                                   `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'content',
+                                   `md5` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'md5',
                                    `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                    `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
-                                   `src_user` text COLLATE utf8mb4_unicode_ci COMMENT 'source user',
-                                   `src_ip` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'source ip',
-                                   `op_type` char(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'operation type',
-                                   `tenant_id` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '租户字段',
-                                   `encrypted_data_key` varchar(1024) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '密钥',
-                                   `publish_type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT 'formal' COMMENT 'publish type gray or formal',
-                                   `gray_name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'gray name',
-                                   `ext_info` longtext COLLATE utf8mb4_unicode_ci COMMENT 'ext info',
+                                   `src_user` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'source user',
+                                   `src_ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'source ip',
+                                   `op_type` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'operation type',
+                                   `tenant_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '租户字段',
+                                   `encrypted_data_key` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '密钥',
+                                   `publish_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'formal' COMMENT 'publish type gray or formal',
+                                   `gray_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'gray name',
+                                   `ext_info` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'ext info',
                                    PRIMARY KEY (`nid`),
                                    KEY `idx_gmt_create` (`gmt_create`),
                                    KEY `idx_gmt_modified` (`gmt_modified`),
                                    KEY `idx_did` (`data_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='多租户改造';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='多租户改造';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -188,7 +273,7 @@ CREATE TABLE `his_config_info` (
 
 LOCK TABLES `his_config_info` WRITE;
 /*!40000 ALTER TABLE `his_config_info` DISABLE KEYS */;
-INSERT INTO `his_config_info` VALUES (0,1,'nd-service-a','DEFAULT_GROUP','','nd:\n  a:\n    calculator:\n      x-factor: 0.987','809562b3ba6e82410358b9d7f403be26','2026-02-23 10:19:53','2026-02-23 18:19:53','nacos','192.168.65.1','I','opcal-cloud-alibaba-demo','','formal','','{\"src_user\":\"nacos\",\"type\":\"yaml\"}'),(0,2,'nd-service-a-flow-rule','SENTINEL_GROUP','','[\n  {\n    \"resource\": \"POST:http://nd-service-b/original-api/calculate\",\n    \"controlBehavior\": 0,\n    \"count\": 50,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0\n  }\n]','80c5a1463f280519a2a3a9102e3afeb3','2026-02-23 10:19:53','2026-02-23 18:19:53','nacos','192.168.65.1','I','opcal-cloud-alibaba-demo','','formal','','{\"src_user\":\"nacos\",\"type\":\"json\"}'),(0,3,'nd-service-a-degrade-rule','SENTINEL_GROUP','','[\n    {\n        \"resource\": \"xyz.opcal.demo.cloud.nd.api.service.CalculatorService:calculate(double,double,double)\",\n        \"count\": 2.5,\n        \"grade\": 0,\n        \"timeWindow\": 2\n    }\n]','d0edbf44fc5fc3d5ffaa20e6c9bf7905','2026-02-23 10:19:53','2026-02-23 18:19:53','nacos','192.168.65.1','I','opcal-cloud-alibaba-demo','','formal','','{\"src_user\":\"nacos\",\"type\":\"json\"}'),(0,4,'nd-service-b','DEFAULT_GROUP','','nd:\n  b:\n    calculator:\n      x-factor: 0.987\n      y-factor: 10.314\n      z-factor: 20.159\n','d174a7a96cd5be6d3950ab485ae3ae28','2026-02-23 10:19:53','2026-02-23 18:19:53','nacos','192.168.65.1','I','opcal-cloud-alibaba-demo','','formal','','{\"src_user\":\"nacos\",\"type\":\"yaml\"}'),(0,5,'nd-service-c-flow-rule','SENTINEL_GROUP','','[\n\n  {\n    \"resource\": \"POST:http://nd-service-a/original-api/calculate\",\n    \"controlBehavior\": 0,\n    \"count\": 150,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0\n  },\n  {\n    \"resource\": \"POST:http://nd-service-b/original-api/calculate\",\n    \"controlBehavior\": 0,\n    \"count\": 250,\n    \"grade\": 1,\n    \"limitApp\": \"default\",\n    \"strategy\": 0\n  }\n]','94bbb08c493ef35179809b58d68415f7','2026-02-23 10:19:53','2026-02-23 18:19:53','nacos','192.168.65.1','I','opcal-cloud-alibaba-demo','','formal','','{\"src_user\":\"nacos\",\"type\":\"json\"}'),(0,6,'nd-service-c-degrade-rule','SENTINEL_GROUP','','[\n  {\n    \"resource\": \"xyz.opcal.demo.cloud.nd.api.service.CalculatorService:calculate(double,double,double)\",\n    \"count\": 25,\n    \"grade\": 0,\n    \"timeWindow\": 1,\n    \"minRequestAmount\": 25,\n    \"slowRatioThreshold\": 0.6\n  }\n]','bb7496167a4ac3597e4566c208dfe77b','2026-02-23 10:19:53','2026-02-23 18:19:53','nacos','192.168.65.1','I','opcal-cloud-alibaba-demo','','formal','','{\"src_user\":\"nacos\",\"type\":\"json\"}');
+INSERT INTO `his_config_info` VALUES (0,7,'xyz.opcal.demo.cloud.nd.api.service.CalculatorService','mapping','','nd-service-a','5885311054d71d727da6e003a6da1275','2026-07-28 14:19:39','2026-07-28 22:19:40',NULL,'192.168.2.11','I','metadata','','formal','','{\"type\":\"text\"}'),(0,8,'xyz.opcal.demo.cloud.nd.api.service.CalculatorService:::provider:nd-service-a','DUBBO_GROUP','','{\"annotations\":[],\"canonicalName\":\"xyz.opcal.demo.cloud.nd.api.service.CalculatorService\",\"codeSource\":\"file:/Users/sing/development/workspace/opcal.demo/opcal-demo/opcal-cloud-alibaba-demo/nacos-demos/nd-service-api/target/classes/\",\"methods\":[{\"annotations\":[],\"name\":\"calculate\",\"parameterTypes\":[\"double\",\"double\",\"double\"],\"parameters\":[],\"returnType\":\"double\"}],\"parameters\":{\"interface\":\"xyz.opcal.demo.cloud.nd.api.service.CalculatorService\",\"release\":\"3.3.6\",\"side\":\"provider\",\"anyhost\":\"true\",\"dubbo\":\"2.0.2\",\"threadpool\":\"virtual\",\"pid\":\"18196\",\"application\":\"nd-service-a\",\"executor-management-mode\":\"isolation\",\"file-cache\":\"true\",\"methods\":\"calculate\",\"deprecated\":\"false\",\"service-name-mapping\":\"true\",\"register-mode\":\"instance\",\"generic\":\"false\",\"bind.port\":\"20880\",\"bind.ip\":\"10.37.129.2\",\"prefer.serialization\":\"hessian2,fastjson2\",\"background\":\"false\",\"dynamic\":\"true\",\"timestamp\":\"1785248379619\"},\"types\":[{\"enums\":[],\"items\":[],\"properties\":{},\"type\":\"double\"}],\"uniqueId\":\"xyz.opcal.demo.cloud.nd.api.service.CalculatorService@file:/Users/sing/development/workspace/opcal.demo/opcal-demo/opcal-cloud-alibaba-demo/nacos-demos/nd-service-api/target/classes/\"}','f20c56cc597788512e2741e16725b6d1','2026-07-28 14:19:39','2026-07-28 22:19:40',NULL,'192.168.2.11','I','metadata','','formal','','{\"type\":\"text\"}');
 /*!40000 ALTER TABLE `his_config_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,9 +285,9 @@ DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permissions` (
-                               `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'role',
-                               `resource` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'resource',
-                               `action` varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'action',
+                               `role` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'role',
+                               `resource` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'resource',
+                               `action` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'action',
                                UNIQUE KEY `uk_role_permission` (`role`,`resource`,`action`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -218,6 +303,36 @@ INSERT INTO `permissions` VALUES ('demo','metadata:*:*','rw'),('demo','opcal-clo
 UNLOCK TABLES;
 
 --
+-- Table structure for table `pipeline_execution`
+--
+
+DROP TABLE IF EXISTS `pipeline_execution`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pipeline_execution` (
+                                      `execution_id` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '执行ID',
+                                      `resource_type` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '资源类型',
+                                      `resource_name` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '资源名称',
+                                      `namespace_id` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '命名空间ID',
+                                      `version` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '版本',
+                                      `status` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '执行状态',
+                                      `pipeline` longtext COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'pipeline节点结果JSON',
+                                      `create_time` bigint NOT NULL COMMENT '创建时间',
+                                      `update_time` bigint NOT NULL COMMENT '修改时间',
+                                      PRIMARY KEY (`execution_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='AI资源发布审核Pipeline执行记录';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pipeline_execution`
+--
+
+LOCK TABLES `pipeline_execution` WRITE;
+/*!40000 ALTER TABLE `pipeline_execution` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pipeline_execution` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `roles`
 --
 
@@ -225,8 +340,8 @@ DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles` (
-                         `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'username',
-                         `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'role',
+                         `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'username',
+                         `role` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'role',
                          UNIQUE KEY `idx_user_role` (`username`,`role`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -250,7 +365,7 @@ DROP TABLE IF EXISTS `tenant_capacity`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tenant_capacity` (
                                    `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-                                   `tenant_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'Tenant ID',
+                                   `tenant_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'Tenant ID',
                                    `quota` int unsigned NOT NULL DEFAULT '0' COMMENT '配额，0表示使用默认值',
                                    `usage` int unsigned NOT NULL DEFAULT '0' COMMENT '使用量',
                                    `max_size` int unsigned NOT NULL DEFAULT '0' COMMENT '单个配置大小上限，单位为字节，0表示使用默认值',
@@ -261,7 +376,7 @@ CREATE TABLE `tenant_capacity` (
                                    `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
                                    PRIMARY KEY (`id`),
                                    UNIQUE KEY `uk_tenant_id` (`tenant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='租户容量信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='租户容量信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,6 +385,7 @@ CREATE TABLE `tenant_capacity` (
 
 LOCK TABLES `tenant_capacity` WRITE;
 /*!40000 ALTER TABLE `tenant_capacity` DISABLE KEYS */;
+INSERT INTO `tenant_capacity` VALUES (1,'metadata',0,2,0,0,0,0,'2026-07-28 22:19:40','2026-07-28 22:29:28');
 /*!40000 ALTER TABLE `tenant_capacity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -282,11 +398,11 @@ DROP TABLE IF EXISTS `tenant_info`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tenant_info` (
                                `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-                               `kp` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'kp',
-                               `tenant_id` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'tenant_id',
-                               `tenant_name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'tenant_name',
-                               `tenant_desc` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'tenant_desc',
-                               `create_source` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'create_source',
+                               `kp` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'kp',
+                               `tenant_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'tenant_id',
+                               `tenant_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'tenant_name',
+                               `tenant_desc` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'tenant_desc',
+                               `create_source` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'create_source',
                                `gmt_create` bigint NOT NULL COMMENT '创建时间',
                                `gmt_modified` bigint NOT NULL COMMENT '修改时间',
                                PRIMARY KEY (`id`),
@@ -313,8 +429,8 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-                         `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'username',
-                         `password` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'password',
+                         `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'username',
+                         `password` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'password',
                          `enabled` tinyint(1) NOT NULL COMMENT 'enabled',
                          PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -329,6 +445,10 @@ LOCK TABLES `users` WRITE;
 INSERT INTO `users` VALUES ('demo','$2a$10$v2YlVJMlDRi5VWgqt6l4C.Y1f82.H9nhf4wfoh/Vcm0bvTRkju6yK',1),('nacos','$2a$10$4it0a5kzulppuAMDxmfsP.Ld7l.8UgjL7hQZPajMzTmISBVD2tatW',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'test'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -338,3 +458,5 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-07-28 22:34:05
