@@ -14,10 +14,6 @@ pipeline {
         choice choices: ['missing', 'always'], name: 'PULL_POLICY'
     }
 
-    environment {
-        OL_MODEL = "hf.co/ornith-ai/Ornith-1.5-35B-A3B-GGUF:q8_0"
-    }
-
     stages {
         stage('Validation') {
             steps {
